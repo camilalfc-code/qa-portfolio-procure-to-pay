@@ -2,14 +2,12 @@
 
 ## Contexto
 
-A solicitação de compra é a etapa inicial do ciclo Procure-to-Pay. O solicitante (diretor de unidade ou chefe de divisão) preenche um **Termo de Referência** descrevendo o que deseja adquirir. O documento segue para aprovação do ordenador de despesa antes de avançar para cotação.
-
-**Base legal:** Lei 14.133/2021 — Nova Lei de Licitações e Contratos Administrativos.
+A solicitação de compra é a etapa inicial do ciclo Procure-to-Pay. O solicitante (gestor de unidade ou chefe de departamento) preenche uma **Requisição de Compra** descrevendo o item ou serviço desejado, a quantidade e a justificativa de negócio. O documento segue para a equipe de compras, que realiza a cotação de preços. Após definição do fornecedor e valor, o gestor aprovador autoriza o avanço para a etapa de emissão da ordem de compra.
 
 **Perfis de usuário:**
-- `SOLICITANTE` — Diretor de unidade / Chefe de divisão (pode abrir solicitação)
-- `ORDENADOR` — Secretário / Ordenador de despesa (aprova ou reprova)
-- `COMPRAS` — Equipe de compras (recebe após aprovação)
+- `SOLICITANTE` — Gestor de unidade / Chefe de departamento (pode abrir solicitação)
+- `APROVADOR` — Gestor financeiro / Diretor (aprova ou reprova após cotação)
+- `COMPRAS` — Equipe de compras (realiza cotação e encaminha para aprovação)
 
 ---
 
@@ -30,16 +28,16 @@ A solicitação de compra é a etapa inicial do ciclo Procure-to-Pay. O solicita
 **Passos:**
 1. Acessar o módulo de Solicitação de Compra
 2. Clicar em "Nova Solicitação"
-3. Preencher o campo **O que deseja adquirir** com "Material escolar — cadernos, lápis e borrachas"
-4. Preencher o campo **Quantidade** com "500 unidades"
-5. Preencher o campo **Justificativa / Finalidade** com "Atendimento às turmas do ensino fundamental para o ano letivo"
+3. Preencher o campo **O que deseja adquirir** com "Material de escritório — cadernos, canetas e grampeadores"
+4. Preencher o campo **Quantidade** com "100 unidades"
+5. Preencher o campo **Justificativa / Finalidade** com "Reposição de estoque para atendimento das equipes operacionais"
 6. Selecionar o **Tipo de aquisição** como "Aquisição de materiais"
-7. Clicar em "Enviar para aprovação"
+7. Clicar em "Enviar para compras"
 
 **Resultado esperado:**
 - Solicitação criada com número de protocolo gerado automaticamente
-- Status alterado para "Aguardando aprovação do ordenador"
-- Notificação enviada ao ordenador de despesa
+- Status alterado para "Aguardando cotação"
+- Notificação enviada à equipe de compras
 - Solicitante visualiza o registro na lista de solicitações com status atualizado
 
 ---
@@ -90,7 +88,7 @@ A solicitação de compra é a etapa inicial do ciclo Procure-to-Pay. O solicita
 - Mensagem de erro específica para o campo "Justificativa"
 - Nenhuma solicitação é criada
 
-> **Nota:** A justificativa é obrigatória pela Lei 14.133/2021 — toda contratação pública deve ter finalidade comprovada.
+> **Nota:** A justificativa é obrigatória para garantir rastreabilidade e conformidade com as políticas internas de compras da organização.
 
 ---
 
@@ -119,7 +117,7 @@ A solicitação de compra é a etapa inicial do ciclo Procure-to-Pay. O solicita
 
 ---
 
-### CT-001-05 — Ordenador aprova solicitação
+### CT-001-05 — Aprovador autoriza solicitação após cotação
 
 | Campo | Valor |
 |---|---|
@@ -127,23 +125,23 @@ A solicitação de compra é a etapa inicial do ciclo Procure-to-Pay. O solicita
 | **Módulo** | Solicitação de Compra — Aprovação |
 | **Tipo** | Funcional — Fluxo de Aprovação |
 | **Prioridade** | Alta |
-| **Pré-condição** | Solicitação criada com status "Aguardando aprovação" / Usuário com perfil ORDENADOR autenticado |
+| **Pré-condição** | Cotação realizada pela equipe de compras / Usuário com perfil APROVADOR autenticado |
 
 **Passos:**
-1. Acessar a lista de solicitações pendentes de aprovação
-2. Localizar a solicitação criada no CT-001-01
-3. Visualizar o Termo de Referência completo
+1. Acessar a lista de solicitações com cotação concluída
+2. Localizar a solicitação vinculada ao CT-001-01
+3. Visualizar a requisição completa com o fornecedor e valor cotado
 4. Clicar em "Aprovar"
 
 **Resultado esperado:**
-- Status da solicitação alterado para "Aprovada — Aguardando cotação"
-- Solicitação encaminhada para a equipe de compras
+- Status da solicitação alterado para "Aprovada — Aguardando emissão de ordem de compra"
+- Solicitação encaminhada para emissão da Purchase Order
 - Notificação enviada ao solicitante informando a aprovação
-- Registro de log com data, hora e nome do ordenador que aprovou
+- Registro de log com data, hora e nome do aprovador
 
 ---
 
-### CT-001-06 — Ordenador reprova solicitação e devolve para ajuste
+### CT-001-06 — Aprovador reprova solicitação e devolve para ajuste
 
 | Campo | Valor |
 |---|---|
@@ -151,10 +149,10 @@ A solicitação de compra é a etapa inicial do ciclo Procure-to-Pay. O solicita
 | **Módulo** | Solicitação de Compra — Reprovação |
 | **Tipo** | Funcional — Fluxo Alternativo |
 | **Prioridade** | Alta |
-| **Pré-condição** | Solicitação criada com status "Aguardando aprovação" / Usuário com perfil ORDENADOR autenticado |
+| **Pré-condição** | Cotação realizada / Usuário com perfil APROVADOR autenticado |
 
 **Passos:**
-1. Acessar a lista de solicitações pendentes
+1. Acessar a lista de solicitações com cotação concluída
 2. Localizar a solicitação
 3. Clicar em "Reprovar / Devolver"
 4. Preencher o campo obrigatório de justificativa da reprovação
@@ -162,7 +160,7 @@ A solicitação de compra é a etapa inicial do ciclo Procure-to-Pay. O solicita
 
 **Resultado esperado:**
 - Status da solicitação alterado para "Devolvida para ajuste"
-- Notificação enviada ao solicitante com o motivo da devolução
+- Notificação enviada ao solicitante e à equipe de compras com o motivo
 - Solicitante consegue editar e reenviar a solicitação
 - Histórico de tramitação registrado com a justificativa
 
