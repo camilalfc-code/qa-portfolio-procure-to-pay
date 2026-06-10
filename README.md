@@ -15,8 +15,8 @@ O projeto simula um ambiente real de QA, incluindo planejamento de testes, casos
 ## 🔄 Fluxo Procure-to-Pay Coberto
 
 ```
-Solicitação → Cotação → Processo de Compra → Contrato/ARP → 
-Empenho (PO) → Entrega → Nota Fiscal → Liquidação → Pagamento
+Requisição → Cotação → Aprovação → Ordem de Compra (PO) → 
+Entrega → Nota Fiscal → Liquidação → Pagamento
 ```
 
 ### Tipos de Aquisição
@@ -35,23 +35,11 @@ Empenho (PO) → Entrega → Nota Fiscal → Liquidação → Pagamento
 ```
 qa-portfolio-procure-to-pay/
 │
-├── docs/
-│   ├── plano-de-testes.md          # Estratégia geral de testes
-│   └── regras-de-negocio.md        # Regras e validações do sistema
-│
 ├── casos-de-teste/
-│   ├── CT-001_solicitacao.md       # Testes de solicitação de compra
-│   ├── CT-002_cotacao.md           # Testes de cotação de preços
-│   ├── CT-003_contrato-arp.md      # Testes de contrato e ARP
-│   ├── CT-004_empenho.md           # Testes de empenho / ordem de compra
-│   ├── CT-005_entrega.md           # Testes de recebimento de mercadoria
-│   └── CT-006_pagamento.md         # Testes de nota fiscal e pagamento
-│
-├── cenarios-de-excecao/
-│   ├── EXC-001_atraso-entrega.md   # Fornecedor não entrega no prazo
-│   ├── EXC-002_entrega-parcial.md  # Entrega incompleta
-│   ├── EXC-003_nota-fiscal.md      # NF com valor ou dados incorretos
-│   └── EXC-004_contrato-vencido.md # Contrato expirado sem renovação
+│   ├── CT-001_solicitacao.md             # Testes de requisição de compra
+│   ├── CT-002_cotacao.md                 # Testes de cotação de preços
+│   ├── CT-003_ordem-de-compra.md         # Testes de ordem de compra (PO)
+│   └── CT-004_recebimento-nf-pagamento.md # Testes de recebimento, NF e pagamento
 │
 ├── bug-reports/
 │   └── (a ser preenchido com bugs encontrados)
@@ -64,18 +52,14 @@ qa-portfolio-procure-to-pay/
 
 ## 🧪 Casos de Teste — Resumo
 
-| ID | Módulo | Tipo | Status |
-|---|---|---|---|
-| CT-001 | Solicitação de Compra | Manual | ✅ Documentado |
-| CT-002 | Cotação de Preços | Manual | ✅ Documentado |
-| CT-003 | Contrato / ARP | Manual | ✅ Documentado |
-| CT-004 | Empenho / Purchase Order | Manual | ✅ Documentado |
-| CT-005 | Recebimento de Mercadoria | Manual | ✅ Documentado |
-| CT-006 | Nota Fiscal e Pagamento | Manual | ✅ Documentado |
-| EXC-001 | Atraso de Entrega | Exceção | ✅ Documentado |
-| EXC-002 | Entrega Parcial | Exceção | ✅ Documentado |
-| EXC-003 | Nota Fiscal Inválida | Exceção | ✅ Documentado |
-| EXC-004 | Contrato Vencido | Exceção | ✅ Documentado |
+| ID | Módulo | Tipo | Casos | Status |
+|---|---|---|---|---|
+| CT-001 | Requisição de Compra | Manual | 9 | ✅ Documentado |
+| CT-002 | Cotação de Preços | Manual | 9 | ✅ Documentado |
+| CT-003 | Ordem de Compra (PO) | Manual | 9 | ✅ Documentado |
+| CT-004 | Recebimento, NF e Pagamento | Manual | 10 | ✅ Documentado |
+
+**Total: 37 casos de teste documentados**
 
 ---
 
