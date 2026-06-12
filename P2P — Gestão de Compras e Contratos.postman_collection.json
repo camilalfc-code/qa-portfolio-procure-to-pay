@@ -1,0 +1,471 @@
+{
+  "info": {
+    "_postman_id": "e193bc74-3dcf-46cd-b24f-78fcc100c802",
+    "name": "P2P — Gestão de Compras e Contratos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54811791",
+    "_collection_link": "https://go.postman.co/collection/54811791-e193bc74-3dcf-46cd-b24f-78fcc100c802?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "01 - Login do Usuário (Autenticação)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Verifica se o status é 200\r",
+              "pm.test(\"Status 200 - Login realizado com sucesso\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Verifica se o token foi retornado\r",
+              "pm.test(\"Token retornado na resposta\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.authorization).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "// Salva o token na variável de ambiente\r",
+              "const json = pm.response.json();\r",
+              "if (json.authorization) {\r",
+              "    pm.environment.set(\"token\", json.authorization);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"{{email_comprador}}\",\r\n  \"password\": \"{{senha_comprador}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "02 - Cadastrar Usuário (Comprador)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Verifica se o status é 201 - Criado\r",
+              "pm.test(\"Status 201 - Usuário cadastrado com sucesso\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "// Verifica se a mensagem de sucesso foi retornada\r",
+              "pm.test(\"Mensagem de sucesso retornada\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.message).to.eql(\"Cadastro realizado com sucesso\");\r",
+              "});\r",
+              "\r",
+              "// Salva o ID do usuário na variável de ambiente\r",
+              "const json = pm.response.json();\r",
+              "if (json._id) {\r",
+              "    pm.environment.set(\"usuario_id\", json._id);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const timestamp = Date.now();\r",
+              "pm.environment.set(\"email_comprador\", `comprador.${timestamp}@p2p.com.br`);\r",
+              "pm.environment.set(\"senha_comprador\", \"teste123\");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"Camila Compradora\",\r\n  \"email\": \"{{email_comprador}}\",\r\n  \"password\": \"{{senha_comprador}}\",\r\n  \"administrador\": \"true\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/usuarios",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "03 - Cadastrar Fornecedor",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Verifica se o status é 201 - Criado\r",
+              "pm.test(\"Status 201 - Fornecedor cadastrado com sucesso\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "// Verifica se a mensagem de sucesso foi retornada\r",
+              "pm.test(\"Mensagem de sucesso retornada\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.message).to.eql(\"Cadastro realizado com sucesso\");\r",
+              "});\r",
+              "\r",
+              "// Salva o ID do fornecedor na variável de ambiente\r",
+              "const json = pm.response.json();\r",
+              "if (json._id) {\r",
+              "    pm.environment.set(\"fornecedor_id\", json._id);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const timestamp = Date.now();\r",
+              "pm.environment.set(\"email_fornecedor\", `fornecedor.${timestamp}@p2p.com.br`);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"Fornecedor Materiais Ltda\",\r\n  \"email\": \"{{email_fornecedor}}\",\r\n  \"password\": \"fornec123\",\r\n  \"administrador\": \"false\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/usuarios",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "04 - Buscar Fornecedor por ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Verifica se o status é 200\r",
+              "pm.test(\"Status 200 - Fornecedor encontrado\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Verifica se o nome do fornecedor está correto\r",
+              "pm.test(\"Nome do fornecedor retornado corretamente\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.nome).to.eql(\"Fornecedor Materiais Ltda\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/usuarios/{{fornecedor_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "usuarios",
+            "{{fornecedor_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "05 - Cadastrar Produto (Item da Ordem de Compra)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 201 - Produto cadastrado com sucesso\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Mensagem de sucesso retornada\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.message).to.eql(\"Cadastro realizado com sucesso\");\r",
+              "});\r",
+              "\r",
+              "// Salva o ID do produto na variável de ambiente\r",
+              "const json = pm.response.json();\r",
+              "if (json._id) {\r",
+              "    pm.environment.set(\"produto_id\", json._id);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const timestamp = Date.now();\r",
+              "pm.environment.set(\"nome_produto\", `Material de Escritório - Resma A4 ${timestamp}`);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"{{nome_produto}}\",\r\n  \"preco\": 45,\r\n  \"descricao\": \"Resma de papel A4 500 folhas - item de aquisição corporativa\",\r\n  \"quantidade\": 100\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/produtos",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "06 - Criar Ordem de Compra (Carrinho)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 201 - Ordem de Compra criada com sucesso\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Mensagem de sucesso retornada\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.message).to.eql(\"Cadastro realizado com sucesso\");\r",
+              "});\r",
+              "\r",
+              "// Salva o ID do carrinho na variável de ambiente\r",
+              "const json = pm.response.json();\r",
+              "if (json._id) {\r",
+              "    pm.environment.set(\"carrinho_id\", json._id);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"produtos\": [\r\n    {\r\n      \"idProduto\": \"{{produto_id}}\",\r\n      \"quantidade\": 10\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/carrinhos",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "carrinhos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "07 - Consultar Ordem de Compra",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200 - Ordem de Compra encontrada\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Produto correto na Ordem de Compra\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.produtos[0].idProduto).to.eql(pm.environment.get(\"produto_id\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Valor total calculado corretamente\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.precoTotal).to.eql(450);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/carrinhos/{{carrinho_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "carrinhos",
+            "{{carrinho_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "08 - Concluir Pagamento (Fechar Ordem de Compra)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200 - Pagamento concluído com sucesso\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Mensagem de conclusão retornada\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.message).to.eql(\"Registro excluído com sucesso\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/carrinhos/concluir-compra",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "carrinhos",
+            "concluir-compra"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
