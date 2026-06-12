@@ -8,7 +8,7 @@
 
 Este repositório documenta a estratégia de testes para um **Sistema de Gestão de Compras e Contratos**, cobrindo o fluxo **Procure-to-Pay (P2P)** — modelo utilizado por ERPs corporativos como SAP, TOTVS e Oracle para gerenciar o ciclo completo de aquisições.
 
-O projeto simula um ambiente real de QA, incluindo planejamento de testes, casos de teste manuais, cenários de exceção baseados em regras de negócio, bug reports e testes de API.
+O projeto simula um ambiente real de QA, incluindo planejamento de testes, casos de teste manuais, cenários de exceção baseados em regras de negócio, bug reports e testes de API REST automatizados com Postman.
 
 ---
 
@@ -43,10 +43,10 @@ qa-portfolio-procure-to-pay/
 │   └── CT-005_contratos-servico.md         # Testes de contratos de serviço
 │
 ├── bug-reports/
-│   └── BUG-REPORTS.md                      # Bug reports documentados
+│   └── BUG-REPORTS.md                      # 6 bug reports documentados
 │
 └── postman/
-    └── (coleção de testes de API REST)
+    └── P2P-Gestao-Compras-Contratos.postman_collection.json  # Coleção API REST
 ```
 
 ---
@@ -80,6 +80,31 @@ qa-portfolio-procure-to-pay/
 
 ---
 
+## 📬 Testes de API REST — Postman
+
+Coleção simulando o ciclo completo P2P via API REST utilizando a API pública **ServeRest**.
+
+| # | Requisição | Método | Validações |
+|---|---|---|---|
+| 01 | Login do Usuário (Autenticação) | POST | Status 200, token retornado e salvo automaticamente |
+| 02 | Cadastrar Usuário (Comprador) | POST | Status 201, mensagem de sucesso, ID salvo |
+| 03 | Cadastrar Fornecedor | POST | Status 201, mensagem de sucesso, ID salvo |
+| 04 | Buscar Fornecedor por ID | GET | Status 200, nome correto retornado |
+| 05 | Cadastrar Produto (Item da PO) | POST | Status 201, mensagem de sucesso, ID salvo |
+| 06 | Criar Ordem de Compra (Carrinho) | POST | Status 201, PO criada com sucesso |
+| 07 | Consultar Ordem de Compra | GET | Status 200, produto correto, valor total calculado |
+| 08 | Concluir Pagamento | DELETE | Status 200, pagamento concluído |
+
+**Resultado: 17/17 testes passando ✅ | 0 falhas | 0 erros**
+
+**Recursos utilizados:**
+- Variáveis de ambiente para encadeamento de dados entre requisições
+- Captura automática de token via Scripts
+- Timestamps dinâmicos para garantir unicidade dos dados
+- Validações de status code, mensagens e estrutura da resposta
+
+---
+
 ## 🎯 Habilidades Demonstradas
 
 - Análise de requisitos e regras de negócio
@@ -87,7 +112,7 @@ qa-portfolio-procure-to-pay/
 - Escrita de casos de teste manuais (fluxo principal, alternativo e exceções)
 - Identificação de cenários de borda (*edge cases*)
 - Documentação de bug reports com severidade e evidências
-- Testes de API REST com Postman
+- Testes de API REST com Postman — encadeamento, variáveis e automação
 - Conhecimento de domínio em ciclo de compras corporativas (P2P)
 
 ---
